@@ -448,7 +448,7 @@ double CheckLot(double Lot,bool Journaling)
    if(LotToOpen>MarketInfo(Symbol(),MODE_MAXLOT))LotToOpen=MarketInfo(Symbol(),MODE_MAXLOT);
    LotToOpen=NormalizeDouble(LotToOpen,2);
 
-   if(Journaling && LotToOpen!=Lot)Print("EA Journaling: Trading Lot has been changed by CheckLot function. Requested lot: "+Lot+". Lot to open: "+LotToOpen);
+   if(Journaling && LotToOpen!=Lot)Print("EA Journaling: Trading Lot has been changed by CheckLot function. Requested lot: "+(string)Lot+". Lot to open: "+(string)LotToOpen);
 
    return(LotToOpen);
   }
@@ -526,11 +526,11 @@ int OpenPositionMarket(int TYPE,double LOT,double SL,double TP,int Magic,int Sli
    double volume=CheckLot(LOT,Journaling);
    if(MarketInfo(symbol,MODE_MARGINREQUIRED)*volume>AccountFreeMargin())
      {
-      Print("Can not open a trade. Not enough free margin to open "+volume+" on "+symbol);
+      Print("Can not open a trade. Not enough free margin to open "+(string)volume+" on "+symbol);
       return(-1);
      }
    int slippage=Slip*K; // Slippage is in points. 1 point = 0.0001 on 4 digit broker and 0.00001 on a 5 digit broker
-   string comment=" "+TYPE+"(#"+Magic+")";
+   string comment=" "+(string)TYPE+"(#"+(string)Magic+")";
    int magic=Magic;
    datetime expiration=0;
    color arrow_color=0;if(TYPE==OP_BUY)arrow_color=Blue;if(TYPE==OP_SELL)arrow_color=Green;
@@ -554,7 +554,7 @@ int OpenPositionMarket(int TYPE,double LOT,double SL,double TP,int Magic,int Sli
             if(Bid-stoploss<=MarketInfo(Symbol(),MODE_STOPLEVEL)*Point) 
               {
                stoploss=NormalizeDouble(Bid-MarketInfo(Symbol(),MODE_STOPLEVEL)*Point,Digits);
-               if(Journaling)Print("EA Journaling: Stop Loss changed from "+initSL+" to "+MarketInfo(Symbol(),MODE_STOPLEVEL)/K+" pips");
+               if(Journaling)Print("EA Journaling: Stop Loss changed from "+(string)initSL+" to "+string(MarketInfo(Symbol(),MODE_STOPLEVEL)/K)+" pips");
               }
            }
          if(TYPE==OP_SELL && SL!=0)
@@ -563,7 +563,7 @@ int OpenPositionMarket(int TYPE,double LOT,double SL,double TP,int Magic,int Sli
             if(stoploss-Ask<=MarketInfo(Symbol(),MODE_STOPLEVEL)*Point) 
               {
                stoploss=NormalizeDouble(Ask+MarketInfo(Symbol(),MODE_STOPLEVEL)*Point,Digits);
-               if(Journaling)Print("EA Journaling: Stop Loss changed from "+initSL+" to "+MarketInfo(Symbol(),MODE_STOPLEVEL)/K+" pips");
+               if(Journaling)Print("EA Journaling: Stop Loss changed from "+(string)initSL+" to "+string(MarketInfo(Symbol(),MODE_STOPLEVEL)/K)+" pips");
               }
            }
          if(TYPE==OP_BUY && TP!=0)
@@ -572,7 +572,7 @@ int OpenPositionMarket(int TYPE,double LOT,double SL,double TP,int Magic,int Sli
             if(takeprofit-Bid<=MarketInfo(Symbol(),MODE_STOPLEVEL)*Point) 
               {
                takeprofit=NormalizeDouble(Ask+MarketInfo(Symbol(),MODE_STOPLEVEL)*Point,Digits);
-               if(Journaling)Print("EA Journaling: Take Profit changed from "+initTP+" to "+MarketInfo(Symbol(),MODE_STOPLEVEL)/K+" pips");
+               if(Journaling)Print("EA Journaling: Take Profit changed from "+(string)initTP+" to "+string(MarketInfo(Symbol(),MODE_STOPLEVEL)/K)+" pips");
               }
            }
          if(TYPE==OP_SELL && TP!=0)
@@ -581,7 +581,7 @@ int OpenPositionMarket(int TYPE,double LOT,double SL,double TP,int Magic,int Sli
             if(Ask-takeprofit<=MarketInfo(Symbol(),MODE_STOPLEVEL)*Point) 
               {
                takeprofit=NormalizeDouble(Bid-MarketInfo(Symbol(),MODE_STOPLEVEL)*Point,Digits);
-               if(Journaling)Print("EA Journaling: Take Profit changed from "+initTP+" to "+MarketInfo(Symbol(),MODE_STOPLEVEL)/K+" pips");
+               if(Journaling)Print("EA Journaling: Take Profit changed from "+(string)initTP+" to "+string(MarketInfo(Symbol(),MODE_STOPLEVEL)/K)+" pips");
               }
            }
          if(Journaling)Print("EA Journaling: Trying to place a market order...");
@@ -607,7 +607,7 @@ int OpenPositionMarket(int TYPE,double LOT,double SL,double TP,int Magic,int Sli
                if(Bid-stoploss<=MarketInfo(Symbol(),MODE_STOPLEVEL)*Point) 
                  {
                   stoploss=NormalizeDouble(Bid-MarketInfo(Symbol(),MODE_STOPLEVEL)*Point,Digits);
-                  if(Journaling)Print("EA Journaling: Stop Loss changed from "+initSL+" to "+(OrderOpenPrice()-stoploss)/(K*Point)+" pips");
+                  if(Journaling)Print("EA Journaling: Stop Loss changed from "+(string)initSL+" to "+string((OrderOpenPrice()-stoploss)/(K*Point))+" pips");
                  }
               }
             if(TYPE==OP_SELL && SL!=0)
@@ -616,7 +616,7 @@ int OpenPositionMarket(int TYPE,double LOT,double SL,double TP,int Magic,int Sli
                if(stoploss-Ask<=MarketInfo(Symbol(),MODE_STOPLEVEL)*Point) 
                  {
                   stoploss=NormalizeDouble(Ask+MarketInfo(Symbol(),MODE_STOPLEVEL)*Point,Digits);
-                  if(Journaling)Print("EA Journaling: Stop Loss changed from "+initSL+" to "+(stoploss-OrderOpenPrice())/(K*Point)+" pips");
+                  if(Journaling)Print("EA Journaling: Stop Loss changed from "+(string)initSL+" to "+string((stoploss-OrderOpenPrice())/(K*Point))+" pips");
                  }
               }
             if(TYPE==OP_BUY && TP!=0)
@@ -625,7 +625,7 @@ int OpenPositionMarket(int TYPE,double LOT,double SL,double TP,int Magic,int Sli
                if(takeprofit-Bid<=MarketInfo(Symbol(),MODE_STOPLEVEL)*Point) 
                  {
                   takeprofit=NormalizeDouble(Ask+MarketInfo(Symbol(),MODE_STOPLEVEL)*Point,Digits);
-                  if(Journaling)Print("EA Journaling: Take Profit changed from "+initTP+" to "+(takeprofit-OrderOpenPrice())/(K*Point)+" pips");
+                  if(Journaling)Print("EA Journaling: Take Profit changed from "+(string)initTP+" to "+string((takeprofit-OrderOpenPrice())/(K*Point))+" pips");
                  }
               }
             if(TYPE==OP_SELL && TP!=0)
@@ -634,7 +634,7 @@ int OpenPositionMarket(int TYPE,double LOT,double SL,double TP,int Magic,int Sli
                if(Ask-takeprofit<=MarketInfo(Symbol(),MODE_STOPLEVEL)*Point) 
                  {
                   takeprofit=NormalizeDouble(Bid-MarketInfo(Symbol(),MODE_STOPLEVEL)*Point,Digits);
-                  if(Journaling)Print("EA Journaling: Take Profit changed from "+initTP+" to "+(OrderOpenPrice()-takeprofit)/(K*Point)+" pips");
+                  if(Journaling)Print("EA Journaling: Take Profit changed from "+(string)initTP+" to "+string((OrderOpenPrice()-takeprofit)/(K*Point))+" pips");
                  }
               }
             bool ModifyOpen=false;
@@ -649,7 +649,7 @@ int OpenPositionMarket(int TYPE,double LOT,double SL,double TP,int Magic,int Sli
    if(Journaling && Ticket<0)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
    if(Journaling && Ticket>0)
      {
-      Print("EA Journaling: Order successfully placed. Ticket: "+Ticket);
+      Print("EA Journaling: Order successfully placed. Ticket: "+(string)Ticket);
      }
    return(Ticket);
   }
@@ -672,11 +672,11 @@ int OpenPositionPending(int TYPE,double OpenPrice,datetime expiration,double LOT
    double volume=CheckLot(LOT,Journaling);
    if(MarketInfo(symbol,MODE_MARGINREQUIRED)*volume>AccountFreeMargin())
      {
-      Print("Can not open a trade. Not enough free margin to open "+volume+" on "+symbol);
+      Print("Can not open a trade. Not enough free margin to open "+(string)volume+" on "+symbol);
       return(-1);
      }
    int slippage=Slip*K; // Slippage is in points. 1 point = 0.0001 on 4 digit broker and 0.00001 on a 5 digit broker
-   string comment=" "+TYPE+"(#"+Magic+")";
+   string comment=" "+(string)TYPE+"(#"+(string)Magic+")";
    int magic=Magic;
    color arrow_color=0;if(TYPE==OP_BUYLIMIT || TYPE==OP_BUYSTOP)arrow_color=Blue;if(TYPE==OP_SELLLIMIT || TYPE==OP_SELLSTOP)arrow_color=Green;
    double stoploss=0;
