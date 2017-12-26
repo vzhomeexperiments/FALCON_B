@@ -3,6 +3,11 @@
 //|                                        Copyright 2015,Lucas Liew 
 //|                                  lucas@blackalgotechnologies.com 
 //+------------------------------------------------------------------+
+#include <01_HistoryFunction.mqh>
+#include <02_OrderProfitToCSV.mqh>
+#include <03_ReadCommandFromCSV.mqh>
+#include <08_TerminalNumber.mqh>
+
 #property copyright "Copyright 2015, Black Algo Technologies Pte Ltd"
 #property copyright "Copyright 2018, Vladimir Zhbanko"
 #property link      "lucas@blackalgotechnologies.com"
@@ -100,7 +105,9 @@ extern int     ATRTimeframe=60; // In minutes
 extern int     ATRPeriod=14;
 
 extern string  Header15="----------EA General Settings-----------";
-extern int     MagicNumber=12345;
+extern int     MagicNumber           = 8118201;
+extern int     TerminalType          = 1;         //0 mean slave, 1 mean master
+extern bool    R_Management          = true;      //R_Management true will enable Decision Support Centre (using R)
 extern int     Slippage=3; // In Pips
 extern bool    IsECNbroker = false; // Is your broker an ECN
 extern bool    OnJournaling = true; // Add EA updates in the Journal Tab
@@ -130,6 +137,11 @@ double HiddenBEList[]; // First dimension is for position ticket numbers
 double HiddenTrailingList[][2]; // First dimension is for position ticket numbers, second is for the hidden trailing stop levels
 double VolTrailingList[][2]; // First dimension is for position ticket numbers, second is for recording of volatility amount (one unit of ATR) at the time of trade
 double HiddenVolTrailingList[][3]; // First dimension is for position ticket numbers, second is for the hidden trailing stop levels, third is for recording of volatility amount (one unit of ATR) at the time of trade
+
+string  InternalHeader3="----------Decision Support Variables-----------";
+bool     TradeAllowed = true; 
+datetime ReferenceTime;       //used for order history
+
 //+------------------------------------------------------------------+
 //| End of Setup                                          
 //+------------------------------------------------------------------+
@@ -138,6 +150,31 @@ double HiddenVolTrailingList[][3]; // First dimension is for position ticket num
 //+------------------------------------------------------------------+
 int init()
   {
+   
+//------------- Decision Support Centre
+// Write file to the sandbox if it's does not exist
+//    
+   ReferenceTime = TimeCurrent(); // record time for order history function
+   
+   //write file system control to enable initial trading
+   TradeAllowed = ReadCommandFromCSV(MagicNumber);
+      if(TradeAllowed == false)
+     {
+      Comment("Trade is not allowed");
+     }
+   else if(TradeAllowed == true)   // or file does not exist, create a new file
+            {
+               string fileName = "SystemControl"+string(MagicNumber)+".csv";//create the name of the file same for all symbols...
+               // open file handle
+               int handle = FileOpen(fileName,FILE_CSV|FILE_READ|FILE_WRITE); FileSeek(handle,0,SEEK_END);
+               string data = string(MagicNumber)+","+string(TerminalType);
+               FileWrite(handle,data);  FileClose(handle);
+               //end of writing to file
+               Comment("Trade is allowed");
+            }
+            
+//---------             
+   
    P=GetP(); // To account for 5 digit brokers. Used to convert pips to decimal place
    YenPairAdjustFactor=GetYenAdjustFactor(); // Adjust for YenPair
 
@@ -175,7 +212,18 @@ int deinit()
 //+------------------------------------------------------------------+
 int start()
   {
-
+  
+//----------Order management through R - to avoid slow down the system only enable with external parameters
+   if(R_Management)
+     {
+         //code that only executed once a bar
+      //   Direction = -1; //set direction to -1 by default in order to achieve cross!
+         OrderProfitToCSV(T_Num(MagicNumber));                        //write previous orders profit results for auto analysis in R
+         TradeAllowed = ReadCommandFromCSV(MagicNumber);              //read command from R to make sure trading is allowed
+      //   Direction = ReadAutoPrediction(MagicNumber, -1);             //get prediction from R for trade direction         
+        
+       
+     }
 //----------Variables to be Refreshed-----------
 
    OrderNumber=0; // OrderNumber used in Entry Rules
