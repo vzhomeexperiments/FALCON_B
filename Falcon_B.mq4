@@ -699,7 +699,7 @@ int OpenPositionPending(int TYPE,double OpenPrice,datetime expiration,double LOT
          if(OpenPrice-stoploss<=MarketInfo(Symbol(),MODE_STOPLEVEL)*Point) 
            {
             stoploss=NormalizeDouble(OpenPrice-MarketInfo(Symbol(),MODE_STOPLEVEL)*Point,Digits);
-            if(Journaling)Print("EA Journaling: Stop Loss changed from "+initSL+" to "+(OpenPrice-stoploss)/(K*Point)+" pips");
+            if(Journaling)Print("EA Journaling: Stop Loss changed from "+(string)initSL+" to "+string((OpenPrice-stoploss)/(K*Point))+" pips");
            }
         }
       if((TYPE==OP_BUYLIMIT || TYPE==OP_BUYSTOP) && TP!=0)
@@ -708,7 +708,7 @@ int OpenPositionPending(int TYPE,double OpenPrice,datetime expiration,double LOT
          if(takeprofit-OpenPrice<=MarketInfo(Symbol(),MODE_STOPLEVEL)*Point) 
            {
             takeprofit=NormalizeDouble(OpenPrice+MarketInfo(Symbol(),MODE_STOPLEVEL)*Point,Digits);
-            if(Journaling)Print("EA Journaling: Take Profit changed from "+initTP+" to "+(takeprofit-OpenPrice)/(K*Point)+" pips");
+            if(Journaling)Print("EA Journaling: Take Profit changed from "+(string)initTP+" to "+string((takeprofit-OpenPrice)/(K*Point))+" pips");
            }
         }
       if((TYPE==OP_SELLLIMIT || TYPE==OP_SELLSTOP) && SL!=0)
@@ -717,7 +717,7 @@ int OpenPositionPending(int TYPE,double OpenPrice,datetime expiration,double LOT
          if(stoploss-OpenPrice<=MarketInfo(Symbol(),MODE_STOPLEVEL)*Point) 
            {
             stoploss=NormalizeDouble(OpenPrice+MarketInfo(Symbol(),MODE_STOPLEVEL)*Point,Digits);
-            if(Journaling)Print("EA Journaling: Stop Loss changed from " + initSL + " to " + (stoploss-OpenPrice)/(K*Point) + " pips");
+            if(Journaling)Print("EA Journaling: Stop Loss changed from " + (string)initSL + " to " + string((stoploss-OpenPrice)/(K*Point)) + " pips");
            }
         }
       if((TYPE==OP_SELLLIMIT || TYPE==OP_SELLSTOP) && TP!=0)
@@ -726,7 +726,7 @@ int OpenPositionPending(int TYPE,double OpenPrice,datetime expiration,double LOT
          if(OpenPrice-takeprofit<=MarketInfo(Symbol(),MODE_STOPLEVEL)*Point) 
            {
             takeprofit=NormalizeDouble(OpenPrice-MarketInfo(Symbol(),MODE_STOPLEVEL)*Point,Digits);
-            if(Journaling)Print("EA Journaling: Take Profit changed from " + initTP + " to " + (OpenPrice-takeprofit)/(K*Point) + " pips");
+            if(Journaling)Print("EA Journaling: Take Profit changed from " + (string)initTP + " to " + string((OpenPrice-takeprofit)/(K*Point)) + " pips");
            }
         }
       if(Journaling)Print("EA Journaling: Trying to place a pending order...");
@@ -741,7 +741,7 @@ int OpenPositionPending(int TYPE,double OpenPrice,datetime expiration,double LOT
    if(Journaling && Ticket<0)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
    if(Journaling && Ticket>0)
      {
-      Print("EA Journaling: Order successfully placed. Ticket: "+Ticket);
+      Print("EA Journaling: Order successfully placed. Ticket: "+(string)Ticket);
      }
    return(Ticket);
   }
@@ -769,7 +769,7 @@ bool CloseOrderPosition(int TYPE,bool Journaling,int Magic,int Slip,int K,int Re
             bool Closing=false;
             double Price=0;
             color arrow_color=0;if(TYPE==OP_BUY)arrow_color=Blue;if(TYPE==OP_SELL)arrow_color=Green;
-            if(Journaling)Print("EA Journaling: Trying to close position "+OrderTicket()+" ...");
+            if(Journaling)Print("EA Journaling: Trying to close position "+(string)OrderTicket()+" ...");
             HandleTradingEnvironment(Journaling,RetryInterval);
             if(TYPE==OP_BUY)Price=Bid; if(TYPE==OP_SELL)Price=Ask;
             Closing=OrderClose(OrderTicket(),OrderLots(),Price,Slip*K,arrow_color);
@@ -782,7 +782,7 @@ bool CloseOrderPosition(int TYPE,bool Journaling,int Magic,int Slip,int K,int Re
          bool Delete=false;
          if(OrderSelect(i,SELECT_BY_POS,MODE_TRADES)==true && OrderSymbol()==Symbol() && OrderMagicNumber()==Magic && OrderType()==TYPE)
            {
-            if(Journaling)Print("EA Journaling: Trying to delete order "+OrderTicket()+" ...");
+            if(Journaling)Print("EA Journaling: Trying to delete order "+(string)OrderTicket()+" ...");
             HandleTradingEnvironment(Journaling,RetryInterval);
             Delete=OrderDelete(OrderTicket(),CLR_NONE);
             if(Journaling && !Delete)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1063,7 +1063,7 @@ bool IsLossLimitBreached(bool LossLimitActivated,double LossLimitPercentage,bool
      {
       output=True;
       profitAndLossPrint=NormalizeDouble(profitAndLoss,4)*100;
-      if(Journaling)if(EntrySignalTrigger!=0) Print("Entry trade triggered but not executed. Loss threshold breached. Current Loss: "+profitAndLossPrint+"%");
+      if(Journaling)if(EntrySignalTrigger!=0) Print("Entry trade triggered but not executed. Loss threshold breached. Current Loss: "+(string)profitAndLossPrint+"%");
      }
 
    return(output);
@@ -1125,7 +1125,7 @@ void SetStopLossHidden(bool Journaling,bool isVolatilitySwitchOn,double fixedSL,
         { // Checks if the element is empty
          HiddenSLList[x,0] = OrderNum;
          HiddenSLList[x,1] = StopL;
-         if(Journaling)Print("EA Journaling: Order "+HiddenSLList[x,0]+" assigned with a hidden SL of "+NormalizeDouble(HiddenSLList[x,1],2)+" pips.");
+         if(Journaling)Print("EA Journaling: Order "+(string)HiddenSLList[x,0]+" assigned with a hidden SL of "+(string)NormalizeDouble(HiddenSLList[x,1],2)+" pips.");
          break;
         }
      }
@@ -1197,7 +1197,7 @@ void TriggerStopLossHidden(bool Journaling,int Retry_Interval,int Magic,int Slip
          if(OrderType()==OP_BUY && OrderOpenPrice() -(orderSL*K*Point)>=Bid) 
            { // Checks SL condition for closing long orders
 
-            if(Journaling)Print("EA Journaling: Trying to close position "+OrderTicket()+" ...");
+            if(Journaling)Print("EA Journaling: Trying to close position "+(string)OrderTicket()+" ...");
             HandleTradingEnvironment(Journaling,Retry_Interval);
             Closing=OrderClose(OrderTicket(),OrderLots(),Bid,Slip*K,Blue);
             if(Journaling && !Closing)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1207,7 +1207,7 @@ void TriggerStopLossHidden(bool Journaling,int Retry_Interval,int Magic,int Slip
          if(OrderType()==OP_SELL && OrderOpenPrice()+(orderSL*K*Point)<=Ask) 
            { // Checks SL condition for closing short orders
 
-            if(Journaling)Print("EA Journaling: Trying to close position "+OrderTicket()+" ...");
+            if(Journaling)Print("EA Journaling: Trying to close position "+(string)OrderTicket()+" ...");
             HandleTradingEnvironment(Journaling,Retry_Interval);
             Closing=OrderClose(OrderTicket(),OrderLots(),Ask,Slip*K,Red);
             if(Journaling && !Closing)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1246,7 +1246,7 @@ void SetTakeProfitHidden(bool Journaling,bool isVolatilitySwitchOn,double fixedT
         { // Checks if the element is empty
          HiddenTPList[x,0] = OrderNum;
          HiddenTPList[x,1] = TakeP;
-         if(Journaling)Print("EA Journaling: Order "+HiddenTPList[x,0]+" assigned with a hidden TP of "+NormalizeDouble(HiddenTPList[x,1],2)+" pips.");
+         if(Journaling)Print("EA Journaling: Order "+(string)HiddenTPList[x,0]+" assigned with a hidden TP of "+(string)NormalizeDouble(HiddenTPList[x,1],2)+" pips.");
          break;
         }
      }
@@ -1318,7 +1318,7 @@ void TriggerTakeProfitHidden(bool Journaling,int Retry_Interval,int Magic,int Sl
          if(OrderType()==OP_BUY && OrderOpenPrice()+(orderTP*K*Point)<=Bid) 
            { // Checks TP condition for closing long orders
 
-            if(Journaling)Print("EA Journaling: Trying to close position "+OrderTicket()+" ...");
+            if(Journaling)Print("EA Journaling: Trying to close position "+(string)OrderTicket()+" ...");
             HandleTradingEnvironment(Journaling,Retry_Interval);
             Closing=OrderClose(OrderTicket(),OrderLots(),Bid,Slip*K,Blue);
             if(Journaling && !Closing)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1328,7 +1328,7 @@ void TriggerTakeProfitHidden(bool Journaling,int Retry_Interval,int Magic,int Sl
          if(OrderType()==OP_SELL && OrderOpenPrice() -(orderTP*K*Point)>=Ask) 
            { // Checks TP condition for closing short orders 
 
-            if(Journaling)Print("EA Journaling: Trying to close position "+OrderTicket()+" ...");
+            if(Journaling)Print("EA Journaling: Trying to close position "+(string)OrderTicket()+" ...");
             HandleTradingEnvironment(Journaling,Retry_Interval);
             Closing=OrderClose(OrderTicket(),OrderLots(),Ask,Slip*K,Red);
             if(Journaling && !Closing)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1359,7 +1359,7 @@ void BreakevenStopAll(bool Journaling,int Retry_Interval,double Breakeven_Buffer
          RefreshRates();
          if(OrderType()==OP_BUY && (Bid-OrderOpenPrice())>(Breakeven_Buffer*K*Point))
            {
-            if(Journaling)Print("EA Journaling: Trying to modify order "+OrderTicket()+" ...");
+            if(Journaling)Print("EA Journaling: Trying to modify order "+(string)OrderTicket()+" ...");
             HandleTradingEnvironment(Journaling,Retry_Interval);
             Modify=OrderModify(OrderTicket(),OrderOpenPrice(),OrderOpenPrice(),OrderTakeProfit(),0,CLR_NONE);
             if(Journaling && !Modify)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1367,7 +1367,7 @@ void BreakevenStopAll(bool Journaling,int Retry_Interval,double Breakeven_Buffer
            }
          if(OrderType()==OP_SELL && (OrderOpenPrice()-Ask)>(Breakeven_Buffer*K*Point))
            {
-            if(Journaling)Print("EA Journaling: Trying to modify order "+OrderTicket()+" ...");
+            if(Journaling)Print("EA Journaling: Trying to modify order "+(string)OrderTicket()+" ...");
             HandleTradingEnvironment(Journaling,Retry_Interval);
             Modify=OrderModify(OrderTicket(),OrderOpenPrice(),OrderOpenPrice(),OrderTakeProfit(),0,CLR_NONE);
             if(Journaling && !Modify)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1465,7 +1465,7 @@ This function scans through the current positions and does 2 things:
             bool Closing=false;
             if(OrderType()==OP_BUY && OrderOpenPrice()>=Bid) 
               { // Checks BE condition for closing long orders    
-               if(Journaling)Print("EA Journaling: Trying to close position "+OrderTicket()+" using hidden breakeven stop...");
+               if(Journaling)Print("EA Journaling: Trying to close position "+(string)OrderTicket()+" using hidden breakeven stop...");
                HandleTradingEnvironment(Journaling,Retry_Interval);
                Closing=OrderClose(OrderTicket(),OrderLots(),Bid,Slip*K,Blue);
                if(Journaling && !Closing)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1473,7 +1473,7 @@ This function scans through the current positions and does 2 things:
               }
             if(OrderType()==OP_SELL && OrderOpenPrice()<=Ask) 
               { // Checks BE condition for closing short orders
-               if(Journaling)Print("EA Journaling: Trying to close position "+OrderTicket()+" using hidden breakeven stop...");
+               if(Journaling)Print("EA Journaling: Trying to close position "+(string)OrderTicket()+" using hidden breakeven stop...");
                HandleTradingEnvironment(Journaling,Retry_Interval);
                Closing=OrderClose(OrderTicket(),OrderLots(),Ask,Slip*K,Red);
                if(Journaling && !Closing)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1487,7 +1487,7 @@ This function scans through the current positions and does 2 things:
                   if(HiddenBEList[y]==0)
                     { // Checks if the element is empty
                      HiddenBEList[y]= orderTicketNumber;
-                     if(Journaling)Print("EA Journaling: Order "+HiddenBEList[y]+" assigned with a hidden breakeven stop.");
+                     if(Journaling)Print("EA Journaling: Order "+(string)HiddenBEList[y]+" assigned with a hidden breakeven stop.");
                      break;
                     }
                  }
@@ -1518,7 +1518,7 @@ void TrailingStopAll(bool Journaling,double TrailingStopDist,double TrailingStop
          RefreshRates();
          if(OrderType()==OP_BUY && (Bid-OrderStopLoss()>(TrailingStopDist+TrailingStopBuff)*K*Point))
            {
-            if(Journaling)Print("EA Journaling: Trying to modify order "+OrderTicket()+" ...");
+            if(Journaling)Print("EA Journaling: Trying to modify order "+(string)OrderTicket()+" ...");
             HandleTradingEnvironment(Journaling,Retry_Interval);
             Modify=OrderModify(OrderTicket(),OrderOpenPrice(),Bid-TrailingStopDist*K*Point,OrderTakeProfit(),0,CLR_NONE);
             if(Journaling && !Modify)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1526,7 +1526,7 @@ void TrailingStopAll(bool Journaling,double TrailingStopDist,double TrailingStop
            }
          if(OrderType()==OP_SELL && ((OrderStopLoss()-Ask>((TrailingStopDist+TrailingStopBuff)*K*Point)) || (OrderStopLoss()==0)))
            {
-            if(Journaling)Print("EA Journaling: Trying to modify order "+OrderTicket()+" ...");
+            if(Journaling)Print("EA Journaling: Trying to modify order "+(string)OrderTicket()+" ...");
             HandleTradingEnvironment(Journaling,Retry_Interval);
             Modify=OrderModify(OrderTicket(),OrderOpenPrice(),Ask+TrailingStopDist*K*Point,OrderTakeProfit(),0,CLR_NONE);
             if(Journaling && !Modify)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1625,7 +1625,7 @@ void SetAndTriggerHiddenTrailing(bool Journaling,double TrailingStopDist,double 
                if(OrderType()==OP_BUY && HiddenTrailingList[x,1]>=Bid) 
                  {
 
-                  if(Journaling)Print("EA Journaling: Trying to close position "+OrderTicket()+" using hidden trailing stop...");
+                  if(Journaling)Print("EA Journaling: Trying to close position "+(string)OrderTicket()+" using hidden trailing stop...");
                   HandleTradingEnvironment(Journaling,Retry_Interval);
                   Closing=OrderClose(OrderTicket(),OrderLots(),Bid,Slip*K,Blue);
                   if(Journaling && !Closing)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1633,7 +1633,7 @@ void SetAndTriggerHiddenTrailing(bool Journaling,double TrailingStopDist,double 
 
                     } else if(OrderType()==OP_SELL && HiddenTrailingList[x,1]<=Ask) {
 
-                  if(Journaling)Print("EA Journaling: Trying to close position "+OrderTicket()+" using hidden trailing stop...");
+                  if(Journaling)Print("EA Journaling: Trying to close position "+(string)OrderTicket()+" using hidden trailing stop...");
                   HandleTradingEnvironment(Journaling,Retry_Interval);
                   Closing=OrderClose(OrderTicket(),OrderLots(),Ask,Slip*K,Red);
                   if(Journaling && !Closing)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1646,12 +1646,12 @@ void SetAndTriggerHiddenTrailing(bool Journaling,double TrailingStopDist,double 
                   if(OrderType()==OP_BUY && (Bid-HiddenTrailingList[x,1]>(TrailingStopDist+TrailingStopBuff)*K*Point)) 
                     {
                      HiddenTrailingList[x,1]=Bid-TrailingStopDist*K*Point; // Assigns new hidden trailing stop level
-                     if(Journaling)Print("EA Journaling: Order "+posTicketNumber+" successfully modified, hidden trailing stop updated to "+NormalizeDouble(HiddenTrailingList[x,1],Digits)+".");
+                     if(Journaling)Print("EA Journaling: Order "+(string)posTicketNumber+" successfully modified, hidden trailing stop updated to "+(string)NormalizeDouble(HiddenTrailingList[x,1],Digits)+".");
                     }
                   if(OrderType()==OP_SELL && (HiddenTrailingList[x,1]-Ask>((TrailingStopDist+TrailingStopBuff)*K*Point))) 
                     {
                      HiddenTrailingList[x,1]=Ask+TrailingStopDist*K*Point; // Assigns new hidden trailing stop level
-                     if(Journaling)Print("EA Journaling: Order "+posTicketNumber+" successfully modified, hidden trailing stop updated "+NormalizeDouble(HiddenTrailingList[x,1],Digits)+".");
+                     if(Journaling)Print("EA Journaling: Order "+(string)posTicketNumber+" successfully modified, hidden trailing stop updated "+(string)NormalizeDouble(HiddenTrailingList[x,1],Digits)+".");
                     }
                  }
                break;
@@ -1674,12 +1674,12 @@ void SetAndTriggerHiddenTrailing(bool Journaling,double TrailingStopDist,double 
                   if(OrderType()==OP_BUY) 
                     {
                      HiddenTrailingList[y,1]=MathMax(Bid,OrderOpenPrice())-TrailingStopDist*K*Point; // Hidden trailing stop level = Higher of Bid or OrderOpenPrice - Trailing Stop Distance
-                     if(Journaling)Print("EA Journaling: Order "+posTicketNumber+" successfully modified, hidden trailing stop added. Trailing Stop = "+NormalizeDouble(HiddenTrailingList[y,1],Digits)+".");
+                     if(Journaling)Print("EA Journaling: Order "+(string)posTicketNumber+" successfully modified, hidden trailing stop added. Trailing Stop = "+(string)NormalizeDouble(HiddenTrailingList[y,1],Digits)+".");
                     }
                   if(OrderType()==OP_SELL) 
                     {
                      HiddenTrailingList[y,1]=MathMin(Ask,OrderOpenPrice())+TrailingStopDist*K*Point; // Hidden trailing stop level = Lower of Ask or OrderOpenPrice + Trailing Stop Distance
-                     if(Journaling)Print("EA Journaling: Order "+posTicketNumber+" successfully modified, hidden trailing stop added. Trailing Stop = "+NormalizeDouble(HiddenTrailingList[y,1],Digits)+".");
+                     if(Journaling)Print("EA Journaling: Order "+(string)posTicketNumber+" successfully modified, hidden trailing stop added. Trailing Stop = "+(string)NormalizeDouble(HiddenTrailingList[y,1],Digits)+".");
                     }
                   break;
                  }
@@ -1772,7 +1772,7 @@ void SetVolTrailingStop(bool Journaling,int Retry_Interval,double VolATR,double 
         }
       if(OrderType()==OP_SELL)
         {
-         if(Journaling)Print("EA Journaling: Trying to modify order "+OrderTicket()+" ...");
+         if(Journaling)Print("EA Journaling: Trying to modify order "+(string)OrderTicket()+" ...");
          HandleTradingEnvironment(Journaling,Retry_Interval);
          Modify=OrderModify(OrderTicket(),OrderOpenPrice(),Ask+VolTrailingStopDist*K*Point,OrderTakeProfit(),0,CLR_NONE);
          IsVolTrailingStopAdded=True;
@@ -1833,7 +1833,7 @@ void ReviewVolTrailingStop(bool Journaling, double VolTrailingDistMulti, double 
                // We update the volatility trailing stop record using OrderModify.
                if(OrderType()==OP_BUY && (Bid-OrderStopLoss()>(VolTrailingDistMulti*VolTrailingList[x,1]+VolTrailingBuffMulti*VolTrailingList[x,1])*K*Point))
                  {
-                  if(Journaling)Print("EA Journaling: Trying to modify order "+OrderTicket()+" ...");
+                  if(Journaling)Print("EA Journaling: Trying to modify order "+(string)OrderTicket()+" ...");
                   HandleTradingEnvironment(Journaling,Retry_Interval);
                   Modify=OrderModify(OrderTicket(),OrderOpenPrice(),Bid-VolTrailingDistMulti*VolTrailingList[x,1]*K*Point,OrderTakeProfit(),0,CLR_NONE);
                   if(Journaling && !Modify)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1841,7 +1841,7 @@ void ReviewVolTrailingStop(bool Journaling, double VolTrailingDistMulti, double 
                  }
                if(OrderType()==OP_SELL && ((OrderStopLoss()-Ask>((VolTrailingDistMulti*VolTrailingList[x,1]+VolTrailingBuffMulti*VolTrailingList[x,1])*K*Point)) || (OrderStopLoss()==0)))
                  {
-                  if(Journaling)Print("EA Journaling: Trying to modify order "+OrderTicket()+" ...");
+                  if(Journaling)Print("EA Journaling: Trying to modify order "+(string)OrderTicket()+" ...");
                   HandleTradingEnvironment(Journaling,Retry_Interval);
                   Modify=OrderModify(OrderTicket(),OrderOpenPrice(),Ask+VolTrailingDistMulti*VolTrailingList[x,1]*K*Point,OrderTakeProfit(),0,CLR_NONE);
                   if(Journaling && !Modify)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1851,7 +1851,7 @@ void ReviewVolTrailingStop(bool Journaling, double VolTrailingDistMulti, double 
               }
            }
         // If order does not have a record attached to it. Alert the trader.
-        if(!doesVolTrailingRecordExist && Journaling) Print("EA Journaling: Error. Order "+posTicketNumber+" has no volatility trailing stop attached to it.");
+        if(!doesVolTrailingRecordExist && Journaling) Print("EA Journaling: Error. Order "+(string)posTicketNumber+" has no volatility trailing stop attached to it.");
         }
      }
   }
@@ -1939,7 +1939,7 @@ void SetHiddenVolTrailing(bool Journaling,double VolATR,double VolTrailingDistMu
          HiddenVolTrailingList[x,0] = OrderNum; // Add order number
          HiddenVolTrailingList[x,1] = VolTrailingStopLevel; // Add volatility trailing stop level 
          HiddenVolTrailingList[x,2] = VolATR/(K*Point); // Add volatility measure aka 1 unit of ATR
-         if(Journaling)Print("EA Journaling: Order "+HiddenVolTrailingList[x,0]+" assigned with a hidden volatility trailing stop level of "+NormalizeDouble(HiddenVolTrailingList[x,1],Digits)+".");
+         if(Journaling)Print("EA Journaling: Order "+(string)HiddenVolTrailingList[x,0]+" assigned with a hidden volatility trailing stop level of "+(string)NormalizeDouble(HiddenVolTrailingList[x,1],Digits)+".");
          break;
         }
      }
@@ -1984,7 +1984,7 @@ void TriggerAndReviewHiddenVolTrailing(bool Journaling, double VolTrailingDistMu
                if(OrderType()==OP_BUY && HiddenVolTrailingList[x,1]>=Bid) 
                  {
 
-                  if(Journaling)Print("EA Journaling: Trying to close position "+OrderTicket()+" using hidden volatility trailing stop...");
+                  if(Journaling)Print("EA Journaling: Trying to close position "+(string)OrderTicket()+" using hidden volatility trailing stop...");
                   HandleTradingEnvironment(Journaling,Retry_Interval);
                   Closing=OrderClose(OrderTicket(),OrderLots(),Bid,Slip*K,Blue);
                   if(Journaling && !Closing)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -1992,7 +1992,7 @@ void TriggerAndReviewHiddenVolTrailing(bool Journaling, double VolTrailingDistMu
 
                     } else if (OrderType()==OP_SELL && HiddenVolTrailingList[x,1]<=Ask) {
 
-                  if(Journaling)Print("EA Journaling: Trying to close position "+OrderTicket()+" using hidden volatility trailing stop...");
+                  if(Journaling)Print("EA Journaling: Trying to close position "+(string)OrderTicket()+" using hidden volatility trailing stop...");
                   HandleTradingEnvironment(Journaling,Retry_Interval);
                   Closing=OrderClose(OrderTicket(),OrderLots(),Ask,Slip*K,Red);
                   if(Journaling && !Closing)Print("EA Journaling: Unexpected Error has happened. Error Description: "+GetErrorDescription(GetLastError()));
@@ -2005,19 +2005,19 @@ void TriggerAndReviewHiddenVolTrailing(bool Journaling, double VolTrailingDistMu
                   if(OrderType()==OP_BUY && (Bid-HiddenVolTrailingList[x,1]>(VolTrailingDistMultiplierHidden*HiddenVolTrailingList[x,2]+VolTrailingBuffMultiplierHidden*HiddenVolTrailingList[x,2])*K*Point)) 
                     {
                      HiddenVolTrailingList[x,1]=Bid-VolTrailingDistMultiplierHidden*HiddenVolTrailingList[x,2]*K*Point; // Assigns new hidden trailing stop level
-                     if(Journaling)Print("EA Journaling: Order "+posTicketNumber+" successfully modified, hidden volatility trailing stop updated to "+NormalizeDouble(HiddenVolTrailingList[x,1],Digits)+".");
+                     if(Journaling)Print("EA Journaling: Order "+(string)posTicketNumber+" successfully modified, hidden volatility trailing stop updated to "+(string)NormalizeDouble(HiddenVolTrailingList[x,1],Digits)+".");
                     }
                   if(OrderType()==OP_SELL && (HiddenVolTrailingList[x,1]-Ask>(VolTrailingDistMultiplierHidden*HiddenVolTrailingList[x,2]+VolTrailingBuffMultiplierHidden*HiddenVolTrailingList[x,2])*K*Point))
                     {
                      HiddenVolTrailingList[x,1]=Ask+VolTrailingDistMultiplierHidden*HiddenVolTrailingList[x,2]*K*Point; // Assigns new hidden trailing stop level
-                     if(Journaling)Print("EA Journaling: Order "+posTicketNumber+" successfully modified, hidden volatility trailing stop updated "+NormalizeDouble(HiddenVolTrailingList[x,1],Digits)+".");
+                     if(Journaling)Print("EA Journaling: Order "+(string)posTicketNumber+" successfully modified, hidden volatility trailing stop updated "+(string)NormalizeDouble(HiddenVolTrailingList[x,1],Digits)+".");
                     }
                  }
                break;
               }
            }
         // If order does not have a record attached to it. Alert the trader.
-        if(!doesHiddenVolTrailingRecordExist && Journaling) Print("EA Journaling: Error. Order "+posTicketNumber+" has no hidden volatility trailing stop attached to it.");
+        if(!doesHiddenVolTrailingRecordExist && Journaling) Print("EA Journaling: Error. Order "+(string)posTicketNumber+" has no hidden volatility trailing stop attached to it.");
         }
      }
   }
