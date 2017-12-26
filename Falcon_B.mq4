@@ -4,8 +4,11 @@
 //|                                  lucas@blackalgotechnologies.com 
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2015, Black Algo Technologies Pte Ltd"
+#property copyright "Copyright 2018, Vladimir Zhbanko"
 #property link      "lucas@blackalgotechnologies.com"
-
+#property link      "https://vladdsm.github.io/myblog_attempt/"
+#property version   "1.001"  
+#property strict
 /* 
 
 Falcon v2.0: 
