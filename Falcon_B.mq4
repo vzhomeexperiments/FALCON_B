@@ -113,7 +113,7 @@ string  InternalHeader2="----------Service Variables-----------";
 
 double Stop,Take;
 double StopHidden,TakeHidden;
-double YenPairAdjustFactor;
+int YenPairAdjustFactor;
 int    P;
 double myATR;
 double FastMA1, SlowMA1, Price1;
@@ -1158,7 +1158,7 @@ void TriggerStopLossHidden(bool Journaling,int Retry_Interval,int Magic,int Slip
      { // Looping through all order number in list
 
       doesOrderExist=False;
-      orderTicketNumber=HiddenSLList[x,0];
+      orderTicketNumber=(int)HiddenSLList[x,0];
 
       if(orderTicketNumber!=0) 
         { // Order exists
@@ -1188,7 +1188,7 @@ void TriggerStopLossHidden(bool Journaling,int Retry_Interval,int Magic,int Slip
    for(int z=0; z<ArrayRange(HiddenSLList,0); z++) 
      { // Loops through elements in the list
 
-      orderTicketNumber=HiddenSLList[z,0]; // Records order numner
+      orderTicketNumber=(int)HiddenSLList[z,0]; // Records order numner
       orderSL=HiddenSLList[z,1]; // Records SL
 
       if(OrderSelect(orderTicketNumber,SELECT_BY_TICKET)==true && OrderSymbol()==Symbol() && OrderMagicNumber()==Magic) 
@@ -1279,7 +1279,7 @@ void TriggerTakeProfitHidden(bool Journaling,int Retry_Interval,int Magic,int Sl
      { // Looping through all order number in list
 
       doesOrderExist=False;
-      orderTicketNumber=HiddenTPList[x,0];
+      orderTicketNumber=(int)HiddenTPList[x,0];
 
       if(orderTicketNumber!=0) 
         { // Order exists
@@ -1309,7 +1309,7 @@ void TriggerTakeProfitHidden(bool Journaling,int Retry_Interval,int Magic,int Sl
    for(int z=0; z<ArrayRange(HiddenTPList,0); z++) 
      { // Loops through elements in the list
 
-      orderTicketNumber=HiddenTPList[z,0]; // Records order numner
+      orderTicketNumber=(int)HiddenTPList[z,0]; // Records order numner
       orderTP=HiddenTPList[z,1]; // Records TP
 
       if(OrderSelect(orderTicketNumber,SELECT_BY_TICKET)==true && OrderSymbol()==Symbol() && OrderMagicNumber()==Magic) 
@@ -1401,7 +1401,7 @@ void UpdateHiddenBEList(bool Journaling,int Retry_Interval,int Magic)
      { // Looping through all order number in list
 
       doesPosExist=False;
-      orderTicketNumber=HiddenBEList[x];
+      orderTicketNumber=(int)HiddenBEList[x];
 
       if(orderTicketNumber!=0)
         { // Order exists
@@ -1560,7 +1560,7 @@ void UpdateHiddenTrailingList(bool Journaling,int Retry_Interval,int Magic)
      { // Looping through all order number in list
 
       doesPosExist=False;
-      orderTicketNumber=HiddenTrailingList[x,0];
+      orderTicketNumber=(int)HiddenTrailingList[x,0];
 
       if(orderTicketNumber!=0)
         { // Order exists
@@ -1714,7 +1714,7 @@ void UpdateVolTrailingList(bool Journaling,int Retry_Interval,int Magic)
      { // Looping through all order number in list
 
       doesPosExist=False;
-      orderTicketNumber=VolTrailingList[x,0];
+      orderTicketNumber=(int)VolTrailingList[x,0];
 
       if(orderTicketNumber!=0)
         { // Order exists
@@ -1880,7 +1880,7 @@ void UpdateHiddenVolTrailingList(bool Journaling,int Retry_Interval,int Magic)
      { // Looping through all order number in list
 
       doesPosExist=False;
-      orderTicketNumber=HiddenVolTrailingList[x,0];
+      orderTicketNumber=(int)HiddenVolTrailingList[x,0];
 
       if(orderTicketNumber!=0)
         { // Order exists
