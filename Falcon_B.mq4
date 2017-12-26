@@ -11,8 +11,8 @@
 #property strict
 /* 
 
-Falcon v2.0: 
-- Exit rules entail our adaptive volatility trailing stop
+Falcon B: 
+- Adding specific functions to manage Decision Support System
 
 */
 
@@ -113,7 +113,8 @@ string  InternalHeader2="----------Service Variables-----------";
 
 double Stop,Take;
 double StopHidden,TakeHidden;
-double P,YenPairAdjustFactor;
+double YenPairAdjustFactor;
+int    P;
 double myATR;
 double FastMA1, SlowMA1, Price1;
 
@@ -1762,7 +1763,7 @@ void SetVolTrailingStop(bool Journaling,int Retry_Interval,double VolATR,double 
       RefreshRates();
       if(OrderType()==OP_BUY)
         {
-         if(Journaling)Print("EA Journaling: Trying to modify order "+OrderTicket()+" ...");
+         if(Journaling)Print("EA Journaling: Trying to modify order "+(string)OrderTicket()+" ...");
          HandleTradingEnvironment(Journaling,Retry_Interval);
          Modify=OrderModify(OrderTicket(),OrderOpenPrice(),Bid-VolTrailingStopDist*K*Point,OrderTakeProfit(),0,CLR_NONE);
          IsVolTrailingStopAdded=True;   
