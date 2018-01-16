@@ -3,7 +3,7 @@
 //|                                        Copyright 2015,Lucas Liew 
 //|                                  lucas@blackalgotechnologies.com 
 //+------------------------------------------------------------------+
-#include <01_HistoryFunction.mqh>
+#include <01_GetHistoryOrder.mqh>
 #include <02_OrderProfitToCSV.mqh>
 #include <03_ReadCommandFromCSV.mqh>
 #include <08_TerminalNumber.mqh>
