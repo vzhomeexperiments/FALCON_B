@@ -24,6 +24,14 @@ Falcon B:
 //+------------------------------------------------------------------+
 //| Setup                                               
 //+------------------------------------------------------------------+
+extern string  Header15="----------EA General Settings-----------";
+extern int     MagicNumber           = 8118201;
+extern int     TerminalType          = 1;         //0 mean slave, 1 mean master
+extern bool    R_Management          = true;      //R_Management true will enable Decision Support Centre (using R)
+extern int     Slippage=3; // In Pips
+extern bool    IsECNbroker = false; // Is your broker an ECN
+extern bool    OnJournaling = true; // Add EA updates in the Journal Tab
+
 extern string  Header1="----------Trading Rules Variables-----------";
 extern int     FastMAPeriod=10;
 extern int     SlowMAPeriod=40;
@@ -32,8 +40,8 @@ extern int     KeltnerMulti=3;
 
 extern string  Header2="----------Position Sizing Settings-----------";
 extern string  Lot_explanation="If IsSizingOn = true, Lots variable will be ignored";
-extern double  Lots=0;
-extern bool    IsSizingOn=True;
+extern double  Lots=0.01;
+extern bool    IsSizingOn=False;
 extern double  Risk=1; // Risk per trade (in percentage)
 
 extern string  Header3="----------TP & SL Settings-----------";
@@ -41,7 +49,7 @@ extern string  Header3="----------TP & SL Settings-----------";
 extern bool    UseFixedStopLoss=True; // If this is false and IsSizingOn = True, sizing algo will not be able to calculate correct lot size. 
 extern double  FixedStopLoss=0; // Hard Stop in Pips. Will be overridden if vol-based SL is true 
 extern bool    IsVolatilityStopOn=True;
-extern double  VolBasedSLMultiplier=6; // Stop Loss Amount in units of Volatility
+extern double  VolBasedSLMultiplier=3; // Stop Loss Amount in units of Volatility
 
 extern bool    UseFixedTakeProfit=True;
 extern double  FixedTakeProfit=0; // Hard Take Profit in Pips. Will be overridden if vol-based TP is true 
@@ -104,13 +112,6 @@ extern double  VolatilityMultiplier=3; // In units of ATR
 extern int     ATRTimeframe=60; // In minutes
 extern int     ATRPeriod=14;
 
-extern string  Header15="----------EA General Settings-----------";
-extern int     MagicNumber           = 8118201;
-extern int     TerminalType          = 1;         //0 mean slave, 1 mean master
-extern bool    R_Management          = true;      //R_Management true will enable Decision Support Centre (using R)
-extern int     Slippage=3; // In Pips
-extern bool    IsECNbroker = false; // Is your broker an ECN
-extern bool    OnJournaling = true; // Add EA updates in the Journal Tab
 
 string  InternalHeader1="----------Errors Handling Settings-----------";
 int     RetryInterval=100; // Pause Time before next retry (in milliseconds)
