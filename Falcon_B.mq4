@@ -24,98 +24,94 @@ Falcon B:
 //+------------------------------------------------------------------+
 //| Setup                                               
 //+------------------------------------------------------------------+
-extern string  Header15="----------EA General Settings-----------";
-extern int     MagicNumber           = 8118201;
-extern int     TerminalType          = 1;         //0 mean slave, 1 mean master
-extern bool    R_Management          = true;      //R_Management true will enable Decision Support Centre (using R)
-extern int     Slippage=3; // In Pips
-extern bool    IsECNbroker = false; // Is your broker an ECN
-extern bool    OnJournaling = true; // Add EA updates in the Journal Tab
+extern string  Header1="----------EA General Settings-----------";
+extern int     MagicNumber                      = 8118201;
+extern int     TerminalType                     = 1;         //0 mean slave, 1 mean master
+extern bool    R_Management                     = true;      //R_Management true will enable Decision Support Centre (using R)
+extern int     Slippage                         = 3; // In Pips
+extern bool    IsECNbroker                      = false; // Is your broker an ECN
+extern bool    OnJournaling                     = true; // Add EA updates in the Journal Tab
 
-extern string  Header1="----------Trading Rules Variables-----------";
-extern int     FastMAPeriod=10;
-extern int     SlowMAPeriod=40;
-extern int     KeltnerPeriod=15;
-extern int     KeltnerMulti=3;
+extern string  Header2="----------Trading Rules Variables-----------";
+extern int     FastMAPeriod                     = 10;
+extern int     SlowMAPeriod                     = 40;
+extern int     KeltnerPeriod                    = 15;
+extern int     KeltnerMulti                     = 3;
 
-extern string  Header2="----------Position Sizing Settings-----------";
-extern string  Lot_explanation="If IsSizingOn = true, Lots variable will be ignored";
-extern double  Lots=0.01;
-extern bool    IsSizingOn=False;
-extern double  Risk=1; // Risk per trade (in percentage)
+extern string  Header3="----------Position Sizing Settings-----------";
+extern string  Lot_explanation                  = "If IsSizingOn = true, Lots variable will be ignored";
+extern double  Lots                             = 0.01;
+extern bool    IsSizingOn                       = False;
+extern double  Risk                             = 1; // Risk per trade (in percentage)
+extern int     MaxPositionsAllowed              = 1;
 
-extern string  Header3="----------TP & SL Settings-----------";
+extern string  Header4="----------TP & SL Settings-----------";
+extern bool    UseFixedStopLoss                 = True; // If this is false and IsSizingOn = True, sizing algo will not be able to calculate correct lot size. 
+extern double  FixedStopLoss                    = 0; // Hard Stop in Pips. Will be overridden if vol-based SL is true 
+extern bool    IsVolatilityStopOn               = True;
+extern double  VolBasedSLMultiplier             = 3; // Stop Loss Amount in units of Volatility
 
-extern bool    UseFixedStopLoss=True; // If this is false and IsSizingOn = True, sizing algo will not be able to calculate correct lot size. 
-extern double  FixedStopLoss=0; // Hard Stop in Pips. Will be overridden if vol-based SL is true 
-extern bool    IsVolatilityStopOn=True;
-extern double  VolBasedSLMultiplier=3; // Stop Loss Amount in units of Volatility
+extern bool    UseFixedTakeProfit               = True;
+extern double  FixedTakeProfit                  = 0; // Hard Take Profit in Pips. Will be overridden if vol-based TP is true 
+extern bool    IsVolatilityTakeProfitOn         = True;
+extern double  VolBasedTPMultiplier             = 6; // Take Profit Amount in units of Volatility
 
-extern bool    UseFixedTakeProfit=True;
-extern double  FixedTakeProfit=0; // Hard Take Profit in Pips. Will be overridden if vol-based TP is true 
-extern bool    IsVolatilityTakeProfitOn=True;
-extern double  VolBasedTPMultiplier=6; // Take Profit Amount in units of Volatility
+extern string  Header5="----------Hidden TP & SL Settings-----------";
+extern bool    UseHiddenStopLoss                = False;
+extern double  FixedStopLoss_Hidden             = 0; // In Pips. Will be overridden if hidden vol-based SL is true 
+extern bool    IsVolatilityStopLossOn_Hidden    = False;
+extern double  VolBasedSLMultiplier_Hidden      = 0; // Stop Loss Amount in units of Volatility
 
-extern string  Header4="----------Hidden TP & SL Settings-----------";
+extern bool    UseHiddenTakeProfit              = False;
+extern double  FixedTakeProfit_Hidden           = 0; // In Pips. Will be overridden if hidden vol-based TP is true 
+extern bool    IsVolatilityTakeProfitOn_Hidden  = False;
+extern double  VolBasedTPMultiplier_Hidden      = 0; // Take Profit Amount in units of Volatility
 
-extern bool    UseHiddenStopLoss=False;
-extern double  FixedStopLoss_Hidden=0; // In Pips. Will be overridden if hidden vol-based SL is true 
-extern bool    IsVolatilityStopLossOn_Hidden=False;
-extern double  VolBasedSLMultiplier_Hidden=0; // Stop Loss Amount in units of Volatility
+extern string  Header6="----------Breakeven Stops Settings-----------";
+extern bool    UseBreakevenStops                = False;
+extern double  BreakevenBuffer                  = 0; // In pips
 
-extern bool    UseHiddenTakeProfit=False;
-extern double  FixedTakeProfit_Hidden=0; // In Pips. Will be overridden if hidden vol-based TP is true 
-extern bool    IsVolatilityTakeProfitOn_Hidden=False;
-extern double  VolBasedTPMultiplier_Hidden=0; // Take Profit Amount in units of Volatility
+extern string  Header7="----------Hidden Breakeven Stops Settings-----------";
+extern bool    UseHiddenBreakevenStops          = False;
+extern double  BreakevenBuffer_Hidden           = 0; // In pips
 
-extern string  Header5="----------Breakeven Stops Settings-----------";
-extern bool    UseBreakevenStops=False;
-extern double  BreakevenBuffer=0; // In pips
+extern string  Header8="----------Trailing Stops Settings-----------";
+extern bool    UseTrailingStops                 = False;
+extern double  TrailingStopDistance             = 0; // In pips
+extern double  TrailingStopBuffer               = 0; // In pips
 
-extern string  Header6="----------Hidden Breakeven Stops Settings-----------";
-extern bool    UseHiddenBreakevenStops=False;
-extern double  BreakevenBuffer_Hidden=0; // In pips
+extern string  Header9="----------Hidden Trailing Stops Settings-----------";
+extern bool    UseHiddenTrailingStops           = False;
+extern double  TrailingStopDistance_Hidden      = 0; // In pips
+extern double  TrailingStopBuffer_Hidden        = 0; // In pips
 
-extern string  Header7="----------Trailing Stops Settings-----------";
-extern bool    UseTrailingStops=False;
-extern double  TrailingStopDistance=0; // In pips
-extern double  TrailingStopBuffer=0; // In pips
+extern string  Header10="----------Volatility Trailing Stops Settings-----------";
+extern bool    UseVolTrailingStops              = False;
+extern double  VolTrailingDistMultiplier        = 0; // In units of ATR
+extern double  VolTrailingBuffMultiplier        = 0; // In units of ATR
 
-extern string  Header8="----------Hidden Trailing Stops Settings-----------";
-extern bool    UseHiddenTrailingStops=False;
-extern double  TrailingStopDistance_Hidden=0; // In pips
-extern double  TrailingStopBuffer_Hidden=0; // In pips
+extern string  Header11="----------Hidden Volatility Trailing Stops Settings-----------";
+extern bool    UseHiddenVolTrailing             = False;
+extern double  VolTrailingDistMultiplier_Hidden = 0; // In units of ATR
+extern double  VolTrailingBuffMultiplier_Hidden = 0; // In units of ATR
 
-extern string  Header9="----------Volatility Trailing Stops Settings-----------";
-extern bool    UseVolTrailingStops=False;
-extern double  VolTrailingDistMultiplier=0; // In units of ATR
-extern double  VolTrailingBuffMultiplier=0; // In units of ATR
-
-extern string  Header10="----------Hidden Volatility Trailing Stops Settings-----------";
-extern bool    UseHiddenVolTrailing=False;
-extern double  VolTrailingDistMultiplier_Hidden=0; // In units of ATR
-extern double  VolTrailingBuffMultiplier_Hidden=0; // In units of ATR
-
-extern string  Header11="----------Volatility Measurement Settings-----------";
-extern int     atr_period=14;
-
-extern string  Header12="----------Max Orders-----------";
-extern int     MaxPositionsAllowed=1;
+extern string  Header12="----------Volatility Measurement Settings-----------";
+extern int     atr_period                       = 14;
 
 extern string  Header13="----------Set Max Loss Limit-----------";
-extern bool    IsLossLimitActivated=False;
-extern double  LossLimitPercent=50;
+extern bool    IsLossLimitActivated             = False;
+extern double  LossLimitPercent                 = 50;
 
 extern string  Header14="----------Set Max Volatility Limit-----------";
-extern bool    IsVolLimitActivated=False;
-extern double  VolatilityMultiplier=3; // In units of ATR
-extern int     ATRTimeframe=60; // In minutes
-extern int     ATRPeriod=14;
+extern bool    IsVolLimitActivated              = False;
+extern double  VolatilityMultiplier             = 3; // In units of ATR
+extern int     ATRTimeframe                     = 60; // In minutes
+extern int     ATRPeriod                        = 14;
 
 
 string  InternalHeader1="----------Errors Handling Settings-----------";
-int     RetryInterval=100; // Pause Time before next retry (in milliseconds)
-int     MaxRetriesPerTick=10;
+int     RetryInterval                           = 100; // Pause Time before next retry (in milliseconds)
+int     MaxRetriesPerTick                       = 10;
 
 string  InternalHeader2="----------Service Variables-----------";
 
