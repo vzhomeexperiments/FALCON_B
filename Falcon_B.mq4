@@ -215,7 +215,7 @@ int start()
      {
          //code that only executed once a bar
       //   Direction = -1; //set direction to -1 by default in order to achieve cross!
-         OrderProfitToCSV(T_Num(MagicNumber));                        //write previous orders profit results for auto analysis in R
+         OrderProfitToCSV(T_Num());                        //write previous orders profit results for auto analysis in R
          TradeAllowed = ReadCommandFromCSV(MagicNumber);              //read command from R to make sure trading is allowed
       //   Direction = ReadAutoPrediction(MagicNumber, -1);             //get prediction from R for trade direction         
         
@@ -533,11 +533,11 @@ bool IsMaxPositionsReached(int MaxPositions,int Magic,bool Journaling)
 // This function checks the number of positions we are holding against the maximum allowed 
 
    int result=False;
-   if(CountPosOrders(Magic,OP_BUY)+CountPosOrders(Magic,OP_SELL)>MaxPositions) 
+   if(CountPosOrders(Magic,OP_BUY)+CountPosOrders(Magic,OP_SELL) > MaxPositions) 
      {
       result=True;
       if(Journaling)Print("Max Orders Exceeded");
-        } else if(CountPosOrders(Magic,OP_BUY)+CountPosOrders(Magic,OP_SELL)==MaxPositions) {
+        } else if(CountPosOrders(Magic,OP_BUY)+CountPosOrders(Magic,OP_SELL) == MaxPositions) {
       result=True;
      }
 
